@@ -1,70 +1,91 @@
-# Getting Started with Create React App
+## Bytebase 风格 GitHub 登录页（前端）
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+这是一个使用 **React + Create React App** 实现的 Bytebase 风格登录页面 UI，提供：
 
-## Available Scripts
+- **左侧大图登录宣传区域**：`public/login.png` 全屏铺满左侧。
+- **右侧登录卡片**：GitHub 登录按钮 + 登录后展示 GitHub 用户头像、昵称、login、邮箱。
+- **GitHub 授权登录流程**：点击按钮跳转 GitHub 授权，授权成功后回到本页面并显示用户信息。
+- **退出登录 / 切换账号**：支持清除后端 session 并重新发起授权。
 
-In the project directory, you can run:
+> 后端 Spring Boot 工程为同级目录下的 `GitHubOAuth` 项目。
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 技术栈
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- React 19 + Create React App
+- 原生 CSS 布局 / 响应式适配
+- 与 Spring Boot 后端通过 HTTP 交互（CORS + Cookie）
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 目录结构（前端）
 
-### `npm run build`
+- `src/App.js`：主页面组件，包含 GitHub 登录按钮、用户信息展示逻辑。
+- `src/App.css`：Bytebase 风格布局与样式。
+- `public/login.png`：登录页面左侧展示的大图（需自行放置）。
+- `package.json`：依赖与 `proxy` 配置（开发环境将 `/api` 转发到后端）。
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 运行前置条件
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Node.js 环境（建议 18+）
+- 已经启动后端 `GitHubOAuth` Spring Boot 服务，默认监听 `http://localhost:4000`
+- 后端已正确配置 GitHub OAuth（见后端 README）
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 本地运行
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+在 `login-page` 目录下：
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+npm install
+npm start
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+开发环境默认地址：<http://localhost:3000>
 
-## Learn More
+`package.json` 中已配置：
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```json
+"proxy": "http://localhost:4000"
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+因此前端访问 `/api/...` 会转发到后端 4000 端口。
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## GitHub 登录流程说明
 
-### Analyzing the Bundle Size
+1. 用户访问 `http://localhost:3000`。
+2. 点击 **Continue with GitHub** 按钮：
+   - 前端跳转到：`http://localhost:4000/api/auth/github/login`
+3. 后端重定向到 GitHub 授权页。
+4. 授权成功后：
+   - GitHub 回调后端 `/api/auth/github/callback?code=...`
+   - 后端用 code 换取 access_token，并从 GitHub 获取用户信息；
+   - 将用户信息保存到 session，重定向回前端：`http://localhost:3000/?login=success`。
+5. 前端检测到 URL 中 `login=success`，调用：`GET http://localhost:4000/api/auth/me` 获取当前用户信息并展示。
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+退出登录：
 
-### Making a Progressive Web App
+- 右侧卡片上的“退出登录 / 切换账号”按钮会调用：
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+  ```http
+  POST http://localhost:4000/api/auth/logout
+  ```
 
-### Advanced Configuration
+  后端清除 session，前端本地状态也会被清空，下次需要重新点击 GitHub 登录。
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+## 打包构建
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```bash
+npm run build
+```
 
-### `npm run build` fails to minify
+生成的静态资源会输出到 `build/` 目录，可部署到任意静态服务器（需同时部署/代理后端 API）。
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
