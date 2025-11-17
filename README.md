@@ -1,5 +1,4 @@
-<img width="345" height="156" alt="image" src="https://github.com/user-attachments/assets/aae42a9c-7f50-496c-ab81-419bed79f1f1" />## Bytebase 风格 GitHub 登录页（前端）
-
+## Bytebase 风格 GitHub 登录页（前端）
 这是一个使用 **React + Create React App** 实现的 Bytebase 风格登录页面 UI，提供：
 
 - **左侧大图登录宣传区域**：`public/login.png` 全屏铺满左侧。
