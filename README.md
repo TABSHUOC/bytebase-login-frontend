@@ -8,11 +8,13 @@
 - **退出登录 / 切换账号**：支持清除后端 session 并重新发起授权。
 
 > 后端 Spring Boot 工程为同级目录下的 `GitHubOAuth` 项目。
-登录前页面：
-> ![Uploading 屏幕截图 2025-11-17 132157.png…]()
-登录后页面：
-> ![Uploading 屏幕截图 2025-11-17 132143.png…]()
 
+
+---
+登录前页面：
+![登录前效果](https://github.com/TABSHUOC/bytebase-login-frontend/blob/main/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-11-17%20132157.png)。
+登录后页面：
+![登录后效果](https://github.com/TABSHUOC/bytebase-login-frontend/blob/main/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-11-17%20132143.png)
 ---
 
 ## 技术栈
