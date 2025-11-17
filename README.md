@@ -1,4 +1,4 @@
-## Bytebase 风格 GitHub 登录页（前端）
+<img width="345" height="156" alt="image" src="https://github.com/user-attachments/assets/aae42a9c-7f50-496c-ab81-419bed79f1f1" />## Bytebase 风格 GitHub 登录页（前端）
 
 这是一个使用 **React + Create React App** 实现的 Bytebase 风格登录页面 UI，提供：
 
@@ -8,6 +8,10 @@
 - **退出登录 / 切换账号**：支持清除后端 session 并重新发起授权。
 
 > 后端 Spring Boot 工程为同级目录下的 `GitHubOAuth` 项目。
+登录前页面：
+> ![Uploading 屏幕截图 2025-11-17 132157.png…]()
+登录后页面：
+> ![Uploading 屏幕截图 2025-11-17 132143.png…]()
 
 ---
 
